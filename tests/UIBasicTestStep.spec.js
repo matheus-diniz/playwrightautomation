@@ -18,15 +18,12 @@ test.beforeEach(async ({ page }) => {
 
 test('rejeitar login com credenciais inválidas', async ({ page }) => {
     await login(page, invalidUser);
-
     await expect(page.getByText(/Incorrect username\/password/i)).toBeVisible();
 });
 
 test('aceita credenciais válidas', async ({ page }) => {
     await login(page, validUser);
-
     await expect(page).toHaveTitle(/ProtoCommerce/i);
-
     await expect(page.getByRole('heading', { name: 'Shop Name' })).toBeVisible();
 });
 
@@ -48,11 +45,8 @@ async function selectUserType(page, type) {
 
     if (type === 'User') {
         await page.getByRole('radio', { name: 'User' }).check();
-
         await expect(page.getByText('You will be limited to only')).toBeVisible();
-
         await page.getByRole('button', { name: 'Okay' }).click();
-
         await expect(page.getByRole('radio', { name: 'User' })).toBeChecked();
     }
 }
@@ -67,6 +61,6 @@ async function validateTermsCheckbox(page) {
     if (!(await termsCheckbox.isChecked())) {
         await termsCheckbox.check();
     }
-
+    
     await expect(termsCheckbox).toBeChecked();
 }
