@@ -9,7 +9,6 @@ class LetsShopLoginPage {
      */
     constructor(page) {
         this.page = page;
-        this.registrationPasswordInput = page.locator('#userPassword');
     }
 
     async goTo() {
@@ -32,7 +31,7 @@ class LetsShopLoginPage {
         await this.selectGender(gender);
         await this.selectOccupation(occupation);
 
-        await this.registrationPasswordInput.fill(password);
+        await this.page.locator('#userPassword').fill(password);
         await this.page.getByRole('textbox', { name: 'Confirm Password', exact: true }).fill(password);
 
         await this.isOlderThan18();

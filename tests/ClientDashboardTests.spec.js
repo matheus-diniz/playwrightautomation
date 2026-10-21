@@ -12,11 +12,15 @@ test('invalid login attempt', async ({ page }) => {
 
 
 test('valid login attempt', async ({ page }) => {
+    const email = process.env.LETSHOP_EMAIL;
+    const password = process.env.LETSHOP_PASSWORD
+
     const loginPage = new LetsShopLoginPage(page);
     await loginPage.goTo();
-    await loginPage.login('terra@terramail.com.br', 'Test@1234');
+    await loginPage.login(email, password);
     await expect(page.getByLabel('Login Successfully')).toBeVisible();
     await page.waitForLoadState('networkidle');
+    await expect(page).toHaveURL(/dashboard/);
 });
 
 
