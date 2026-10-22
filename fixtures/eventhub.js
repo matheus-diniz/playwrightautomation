@@ -1,8 +1,7 @@
 const { randomUUID } = require('crypto');
 const { test: base, expect } = require('@playwright/test');
-const { loginAs } = require('./helpers');
+const EventHubLoginPage = require('../pages/EventHubLoginPage');
 
-const BASE_URL = 'https://eventhub.rahulshettyacademy.com';
 const API_URL = 'https://api.eventhub.rahulshettyacademy.com/api';
 
 function getTestUser() {
@@ -24,7 +23,8 @@ async function requireSuccessfulResponse(response, operation) {
 
 const test = base.extend({
     authenticatedPage: async ({ page }, use) => {
-        await loginAs(page, getTestUser());
+        const loginPage = new EventHubLoginPage(page);
+        await loginPage.login(getTestUser());
         await use(page);
     },
 

@@ -1,6 +1,6 @@
 const { randomUUID } = require('crypto');
 const { test, expect } = require('@playwright/test');
-const { loginAs } = require('./helpers');
+const EventHubLoginPage = require('../../pages/EventHubLoginPage');
 
 const BASE_URL = 'https://eventhub.rahulshettyacademy.com';
 const API_URL = 'https://api.eventhub.rahulshettyacademy.com/api';
@@ -71,7 +71,8 @@ test('denies a user access to another user booking', async ({ request, page }) =
     const yahooBookingId = bookingBody.data?.id;
     expect(yahooBookingId).toBeTruthy();
 
-    await loginAs(page, gmailUser);
+    const loginPage = new EventHubLoginPage(page);
+    await loginPage.login(gmailUser);
     await page.goto(`${BASE_URL}/bookings/${yahooBookingId}`, {
         waitUntil: 'networkidle',
     });

@@ -1,4 +1,4 @@
-const { test, expect } = require('../../fixtures/test');
+const { test, expect } = require('../../fixtures/letsshop');
 const LetsShopLoginPage = require('../../pages/LetsShopLoginPage');
 const LetsShopOrdersPage = require('../../pages/LetsShopOrdersPage');
 

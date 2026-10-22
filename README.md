@@ -13,18 +13,20 @@ The suites cover three practice applications:
 ```text
 .
 ├── pages/
+│   ├── EventHubLoginPage.js
 │   ├── LetsShopLoginPage.js
 │   ├── LetsShopDashboardPage.js
 │   ├── LetsShopCartPage.js
 │   ├── LetsShopCheckoutPage.js
 │   └── LetsShopOrdersPage.js
+├── fixtures/
+│   ├── eventhub.js
+│   └── letsshop.js
 ├── tests/
 │   ├── eventhub/
 │   │   ├── EventHubCrossUserBookingTests.spec.js
 │   │   ├── EventHubFixturesTests.spec.js
-│   │   ├── EventHubInterceptTests.spec.js
-│   │   ├── fixtures.js
-│   │   └── helpers.js
+│   │   └── EventHubInterceptTests.spec.js
 │   ├── letsshop/
 │   │   ├── ClientDashboardTests.spec.js
 │   │   ├── LetsShopDashboardTests.spec.js
@@ -35,7 +37,7 @@ The suites cover three practice applications:
 └── package.json
 ```
 
-Page Objects encapsulate screen-specific locators and interactions. Tests describe user-visible scenarios and assert outcomes. Each Playwright test receives its own browser context and prepares its required state, so tests can run independently.
+Page Objects encapsulate screen-specific locators and interactions. Application-specific Playwright fixtures live in `fixtures/`, while tests are grouped under `tests/` by application. Tests describe user-visible scenarios and assert outcomes. Each Playwright test receives its own browser context and prepares its required state, so tests can run independently.
 
 ## Coverage
 

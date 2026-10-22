@@ -1,4 +1,4 @@
-const { test, expect } = require('./fixtures');
+const { test, expect } = require('../../fixtures/eventhub');
 
 const BASE_URL = 'https://eventhub.rahulshettyacademy.com';
 

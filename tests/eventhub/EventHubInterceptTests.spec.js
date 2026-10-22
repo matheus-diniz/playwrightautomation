@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { loginAs } = require('./helpers');
+const EventHubLoginPage = require('../../pages/EventHubLoginPage');
 
 const BASE_URL = 'https://eventhub.rahulshettyacademy.com';
 
@@ -33,7 +33,8 @@ async function loginAndGoToEvents(page) {
         throw new Error('DATA NOT FOUND: Please set TEST_USER_EMAIL and TEST_USER_PASSWORD in environment variables.');
     }
 
-    await loginAs(page, { email, password });
+    const loginPage = new EventHubLoginPage(page);
+    await loginPage.login({ email, password });
     await page.goto(`${BASE_URL}/events`);
 }
 
