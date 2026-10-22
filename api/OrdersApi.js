@@ -1,17 +1,18 @@
 const BASE_URL = 'https://rahulshettyacademy.com/api/ecom';
 
 class OrdersApi {
-    constructor(apiContext) {
+    constructor(apiContext, authToken) {
         this.apiContext = apiContext;
+        this.authToken = authToken;
     }
 
-    async createOrder(authToken, order) {
+    async createOrder(order) {
         const response = await this.apiContext.post(`${BASE_URL}/order/create-order`, {
             data: {
                 orders: [order],
             },
             headers: {
-                Authorization: authToken,
+                Authorization: this.authToken,
             },
         });
 
