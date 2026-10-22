@@ -21,7 +21,9 @@ The suites cover three practice applications:
 ├── tests/
 │   ├── eventhub/
 │   │   ├── EventHubCrossUserBookingTests.spec.js
+│   │   ├── EventHubFixturesTests.spec.js
 │   │   ├── EventHubInterceptTests.spec.js
+│   │   ├── fixtures.js
 │   │   └── helpers.js
 │   ├── letsshop/
 │   │   ├── ClientDashboardTests.spec.js
@@ -41,6 +43,7 @@ Page Objects encapsulate screen-specific locators and interactions. Tests descri
 
 - Mock the events API to verify the sandbox banner for different event counts.
 - Verify that one user cannot view another user's booking.
+- Use custom fixtures to authenticate through the UI, create an event through the API, verify it, and delete the test event.
 - The cross-user scenario registers uniquely named sandbox users and creates a booking through the EventHub API.
 
 ### Let's Shop
@@ -106,6 +109,7 @@ npx playwright test tests/letsshop/LetsShopWebAPITests.spec.js
 npx playwright test tests/UIBasicTestStep.spec.js
 npx playwright test tests/eventhub/EventHubInterceptTests.spec.js
 npx playwright test tests/eventhub/EventHubCrossUserBookingTests.spec.js
+npx playwright test tests/eventhub/EventHubFixturesTests.spec.js
 ```
 
 Run tests matching a title:
