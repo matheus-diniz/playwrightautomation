@@ -1,16 +1,16 @@
 const { test, expect } = require('@playwright/test');
-const LetsShopLoginPage = require('../pages/LetsShopLoginPage');
-const LetsShopDashboardPage = require('../pages/LetsShopDashboardPage');
-const LetsShopCartPage = require('../pages/LetsShopCartPage');
-const LetsShopCheckoutPage = require('../pages/LetsShopCheckoutPage');
-const LetsShopOrdersPage = require('../pages/LetsShopOrdersPage');
+const LetsShopLoginPage = require('../../pages/LetsShopLoginPage');
+const LetsShopDashboardPage = require('../../pages/LetsShopDashboardPage');
+const LetsShopCartPage = require('../../pages/LetsShopCartPage');
+const LetsShopCheckoutPage = require('../../pages/LetsShopCheckoutPage');
+const LetsShopOrdersPage = require('../../pages/LetsShopOrdersPage');
 
 test.beforeEach(async ({ page }) => {
-    const email = process.env.LETSHOP_EMAIL;
-    const password = process.env.LETSHOP_PASSWORD;
+    const email = process.env.TEST_USER_EMAIL;
+    const password = process.env.TEST_USER_PASSWORD;
 
     if (!email || !password) {
-        throw new Error('Set LETSHOP_EMAIL and LETSHOP_PASSWORD environment variables.');
+        throw new Error('Set TEST_USER_EMAIL and TEST_USER_PASSWORD environment variables.');
     }
 
     const loginPage = new LetsShopLoginPage(page);
@@ -34,7 +34,7 @@ async function createOrder(page, testInfo) {
     await expect(page).toHaveURL(/#\/dashboard\/order(?:\?.*)?$/);
 
     await checkoutPage.fillPaymentDetails('123', 'Test Buyer');
-    await checkoutPage.fillShippingInformation(process.env.LETSHOP_EMAIL, 'India');
+    await checkoutPage.fillShippingInformation(process.env.TEST_USER_EMAIL, 'India');
     await checkoutPage.placeOrder();
     await checkoutPage.validateOrderConfirmation();
 

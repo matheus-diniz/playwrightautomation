@@ -1,8 +1,8 @@
 const { test, expect } = require('@playwright/test');
-const LetsShopLoginPage = require('../pages/LetsShopLoginPage');
-const LetsShopDashboardPage = require('../pages/LetsShopDashboardPage');
-const LetsShopCartPage = require('../pages/LetsShopCartPage');
-const LetsShopCheckoutPage = require('../pages/LetsShopCheckoutPage');
+const LetsShopLoginPage = require('../../pages/LetsShopLoginPage');
+const LetsShopDashboardPage = require('../../pages/LetsShopDashboardPage');
+const LetsShopCartPage = require('../../pages/LetsShopCartPage');
+const LetsShopCheckoutPage = require('../../pages/LetsShopCheckoutPage');
 
 async function openCheckoutWithProduct(page, productName) {
     const dashboardPage = new LetsShopDashboardPage(page);
@@ -21,11 +21,11 @@ async function openCheckoutWithProduct(page, productName) {
 }
 
 test.beforeEach(async ({ page }) => {
-    const email = process.env.LETSHOP_EMAIL;
-    const password = process.env.LETSHOP_PASSWORD;
+    const email = process.env.TEST_USER_EMAIL;
+    const password = process.env.TEST_USER_PASSWORD;
 
     if (!email || !password) {
-        throw new Error('DATA NOT FOUND: Please set LETSHOP_EMAIL and LETSHOP_PASSWORD in environment variables.');
+        throw new Error('DATA NOT FOUND: Please set TEST_USER_EMAIL and TEST_USER_PASSWORD in environment variables.');
     }
 
     const loginPage = new LetsShopLoginPage(page);
@@ -71,7 +71,7 @@ test('search, add and proceed to checkout', async ({ page }) => {
 test('does not place order without CVV and cardholder name', async ({ page }) => {
     const checkoutPage = await openCheckoutWithProduct(page, 'ADIDAS ORIGINAL');
 
-    await checkoutPage.fillShippingInformation(process.env.LETSHOP_EMAIL, 'India');
+    await checkoutPage.fillShippingInformation(process.env.TEST_USER_EMAIL, 'India');
     await checkoutPage.placeOrder();
 
     await expect(page).toHaveURL(/#\/dashboard\/order(?:\?.*)?$/);
@@ -92,7 +92,7 @@ test('places order successfully without a coupon', async ({ page }, testInfo) =>
     const checkoutPage = await openCheckoutWithProduct(page, 'ADIDAS ORIGINAL');
 
     await checkoutPage.fillPaymentDetails('123', 'Test Buyer');
-    await checkoutPage.fillShippingInformation(process.env.LETSHOP_EMAIL, 'India');
+    await checkoutPage.fillShippingInformation(process.env.TEST_USER_EMAIL, 'India');
     await checkoutPage.placeOrder();
     await checkoutPage.validateOrderConfirmation();
 

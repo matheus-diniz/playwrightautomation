@@ -2,8 +2,9 @@
 
 End-to-end browser automation built with [Playwright Test](https://playwright.dev/docs/intro) and JavaScript. The project applies reusable Page Objects, isolated test scenarios, accessible locators, and Playwright's auto-waiting assertions to exercise login, account creation, shopping cart, checkout, and order management.
 
-The suites cover two practice applications:
+The suites cover three practice applications:
 
+- [EventHub](https://eventhub.rahulshettyacademy.com)
 - [Let's Shop](https://rahulshettyacademy.com/client/)
 - [ProtoCommerce login practice](https://rahulshettyacademy.com/loginpagePractise/)
 
@@ -18,9 +19,13 @@ The suites cover two practice applications:
 │   ├── LetsShopCheckoutPage.js
 │   └── LetsShopOrdersPage.js
 ├── tests/
-│   ├── LetsShopDashboardTests.spec.js
-│   ├── LetsShopOrdersTests.spec.js
-│   ├── ClientDashboardTests.spec.js
+│   ├── eventhub/
+│   │   └── EventHubInterceptTests.spec.js
+│   ├── letsshop/
+│   │   ├── ClientDashboardTests.spec.js
+│   │   ├── LetsShopDashboardTests.spec.js
+│   │   ├── LetsShopOrdersTests.spec.js
+│   │   └── LetsShopWebAPITests.spec.js
 │   └── UIBasicTestStep.spec.js
 ├── playwright.config.js
 └── package.json
@@ -64,13 +69,13 @@ npx playwright install chromium
 
 ## Credentials
 
-The Let's Shop dashboard and Orders suites read `LETSHOP_EMAIL` and `LETSHOP_PASSWORD`. The Playwright configuration loads these values from a local `.env` file using `dotenv`.
+The Let's Shop and EventHub suites use the same test account through `TEST_USER_EMAIL` and `TEST_USER_PASSWORD`. The Playwright configuration loads these values from a local `.env` file using `dotenv`.
 
 Create `.env` in the repository root:
 
 ```env
-LETSHOP_EMAIL=your-test-account-email
-LETSHOP_PASSWORD=your-test-account-password
+TEST_USER_EMAIL=your-test-account-email
+TEST_USER_PASSWORD=your-test-account-password
 ```
 
 `.env` is ignored by Git. Do not commit credentials; configure CI credentials as protected secrets. These tests interact with a shared external practice application and create or delete orders, so use a dedicated test account.
@@ -86,10 +91,12 @@ npx playwright test
 Run a specific suite:
 
 ```bash
-npx playwright test tests/LetsShopDashboardTests.spec.js
-npx playwright test tests/LetsShopOrdersTests.spec.js
-npx playwright test tests/ClientDashboardTests.spec.js
+npx playwright test tests/letsshop/LetsShopDashboardTests.spec.js
+npx playwright test tests/letsshop/LetsShopOrdersTests.spec.js
+npx playwright test tests/letsshop/ClientDashboardTests.spec.js
+npx playwright test tests/letsshop/LetsShopWebAPITests.spec.js
 npx playwright test tests/UIBasicTestStep.spec.js
+npx playwright test tests/eventhub/EventHubInterceptTests.spec.js
 ```
 
 Run tests matching a title:

@@ -4,11 +4,11 @@ const OrdersApi = require('../api/OrdersApi');
 
 const test = base.extend({
     authToken: async ({ request }, use) => {
-        const email = process.env.LETSHOP_EMAIL;
-        const password = process.env.LETSHOP_PASSWORD;
+        const email = process.env.TEST_USER_EMAIL;
+        const password = process.env.TEST_USER_PASSWORD;
 
         if (!email || !password) {
-            throw new Error('DATA NOT FOUND: Please set LETSHOP_EMAIL and LETSHOP_PASSWORD in environment variables.');
+            throw new Error('DATA NOT FOUND: Please set TEST_USER_EMAIL and TEST_USER_PASSWORD in environment variables.');
         }
 
         const authApi = new AuthApi(request);

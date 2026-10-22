@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "npx playwright test tests/LetsShopWebAPITests.spec.js --headed --project=chromium"
+    "test": "npx playwright test tests/letsshop/LetsShopWebAPITests.spec.js --headed --project=chromium"
   },
   "keywords": [],
   "author": "",

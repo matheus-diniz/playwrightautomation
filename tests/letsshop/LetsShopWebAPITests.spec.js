@@ -1,6 +1,6 @@
-const { test, expect } = require('../fixtures/test');
-const LetsShopLoginPage = require('../pages/LetsShopLoginPage');
-const LetsShopOrdersPage = require('../pages/LetsShopOrdersPage');
+const { test, expect } = require('../../fixtures/test');
+const LetsShopLoginPage = require('../../pages/LetsShopLoginPage');
+const LetsShopOrdersPage = require('../../pages/LetsShopOrdersPage');
 
 test('access dashboard with valid auth token', async ({ authenticatedPage }) => {
     const loginPage = new LetsShopLoginPage(authenticatedPage);

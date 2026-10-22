@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 
-const LetsShopLoginPage = require('../pages/LetsShopLoginPage');
+const LetsShopLoginPage = require('../../pages/LetsShopLoginPage');
 
 test('invalid login attempt', async ({ page }) => {
     const loginPage = new LetsShopLoginPage(page);
@@ -12,8 +12,12 @@ test('invalid login attempt', async ({ page }) => {
 
 
 test('valid login attempt', async ({ page }) => {
-    const email = process.env.LETSHOP_EMAIL;
-    const password = process.env.LETSHOP_PASSWORD
+    const email = process.env.TEST_USER_EMAIL;
+    const password = process.env.TEST_USER_PASSWORD;
+
+    if (!email || !password) {
+        throw new Error('DATA NOT FOUND: Please set TEST_USER_EMAIL and TEST_USER_PASSWORD in environment variables.');
+    }
 
     const loginPage = new LetsShopLoginPage(page);
     await loginPage.goTo();
