@@ -1,6 +1,6 @@
 const { test: base, expect } = require('@playwright/test');
 const AuthApi = require('../api/AuthApi');
-const OrdersApi = require('../api/OrdersApi');
+const OrdersApi = require('../api/OrdersApi.ts');
 
 const test = base.extend({
     authToken: async ({ request }, use) => {

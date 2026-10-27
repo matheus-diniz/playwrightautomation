@@ -101,6 +101,12 @@ Run all tests:
 npx playwright test
 ```
 
+Check the TypeScript types in the Orders API client:
+
+```bash
+npm run typecheck
+```
+
 Run a specific suite:
 
 ```bash
