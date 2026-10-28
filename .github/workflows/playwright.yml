@@ -1,9 +1,9 @@
-name: Playwright Tests
+name: Cucumber Tests
 on:
   push:
-    branches: [ main, master ]
+    branches: [ master ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ master ]
 jobs:
   test:
     timeout-minutes: 60
@@ -13,15 +13,21 @@ jobs:
     - uses: actions/setup-node@v4
       with:
         node-version: lts/*
+        cache: npm
     - name: Install dependencies
       run: npm ci
-    - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
-    - name: Run Playwright tests
-      run: npx playwright test
-    - uses: actions/upload-artifact@v4
-      if: ${{ !cancelled() }}
+    - name: Install Chromium
+      run: npx playwright install --with-deps chromium
+    - name: Run Cucumber tests and generate report
+      run: npx cucumber-js --format progress --format html:cucumber-report.html
+      env:
+        TEST_USER_EMAIL: ${{ secrets.TEST_USER_EMAIL }}
+        TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
+    - name: Upload Cucumber report
+      if: ${{ always() }}
+      uses: actions/upload-artifact@v4
       with:
-        name: playwright-report
-        path: playwright-report/
+        name: cucumber-report
+        path: cucumber-report.html
+        if-no-files-found: warn
         retention-days: 30
