@@ -1,6 +1,6 @@
 # Playwright E2E Automation
 
-End-to-end browser automation built with [Playwright Test](https://playwright.dev/docs/intro) and JavaScript. The project applies reusable Page Objects, isolated test scenarios, accessible locators, and Playwright's auto-waiting assertions to exercise login, account creation, shopping cart, checkout, and order management.
+End-to-end browser automation built with [Cucumber.js](https://cucumber.io/docs/installation/) and [Playwright](https://playwright.dev/docs/intro). Scenarios are written in Gherkin, implemented by step definitions, and use reusable Page Objects and Playwright assertions to exercise login, account creation, shopping cart, checkout, API behavior, and order management.
 
 The suites cover three practice applications:
 
@@ -19,25 +19,24 @@ The suites cover three practice applications:
 │   ├── LetsShopCartPage.js
 │   ├── LetsShopCheckoutPage.js
 │   └── LetsShopOrdersPage.js
-├── fixtures/
-│   ├── eventhub.js
-│   └── letsshop.js
-├── tests/
-│   ├── eventhub/
-│   │   ├── EventHubCrossUserBookingTests.spec.js
-│   │   ├── EventHubFixturesTests.spec.js
-│   │   └── EventHubInterceptTests.spec.js
-│   ├── letsshop/
-│   │   ├── ClientDashboardTests.spec.js
-│   │   ├── LetsShopDashboardTests.spec.js
-│   │   ├── LetsShopOrdersTests.spec.js
-│   │   └── LetsShopWebAPITests.spec.js
-│   └── UIBasicTestStep.spec.js
+├── api/
+│   ├── AuthApi.js
+│   └── OrdersApi.ts
+├── features/
+│   ├── eventhub.feature
+│   ├── letsshop.feature
+│   ├── protocommerce.feature
+│   ├── step_definitions/
+│   │   ├── eventhub.steps.js
+│   │   ├── letsshop.steps.js
+│   │   └── protocommerce.steps.js
+│   └── support/
+│       └── world.js
 ├── playwright.config.js
 └── package.json
 ```
 
-Page Objects encapsulate screen-specific locators and interactions. Application-specific Playwright fixtures live in `fixtures/`, while tests are grouped under `tests/` by application. Tests describe user-visible scenarios and assert outcomes. Each Playwright test receives its own browser context and prepares its required state, so tests can run independently.
+Page Objects encapsulate screen-specific locators and interactions. Gherkin feature files describe user-visible scenarios, while step definitions implement them. Cucumber hooks create an isolated Playwright context for each scenario. All scenarios exercise the web UI; some use API calls to prepare test data. The `@api` tag identifies those hybrid scenarios, and `@web` selects scenarios that exercise the UI. Tags can be used to filter execution.
 
 ## Coverage
 
@@ -45,18 +44,18 @@ Page Objects encapsulate screen-specific locators and interactions. Application-
 
 - Mock the events API to verify the sandbox banner for different event counts.
 - Verify that one user cannot view another user's booking.
-- Use custom fixtures to authenticate through the UI, create an event through the API, verify it, and delete the test event.
+- Authenticate through the UI, create an event through the API, verify it, and delete the test event.
 - The cross-user scenario registers uniquely named sandbox users and creates a booking through the EventHub API.
 
 ### Let's Shop
 
-- Login before each dashboard and order scenario using environment-provided credentials.
+- Sign in with environment-provided credentials for the website login, cart, checkout, and order scenarios. API-backed scenarios authenticate through the API.
 - Add a product to the cart, verify it, and remove it.
 - Navigate from the cart to checkout.
 - Verify negative checkout paths when required payment details or shipping country are missing.
 - Complete an order without a coupon and verify the order confirmation.
-- Capture the generated order ID in the Playwright report.
-- Create an order for each Orders scenario, then view it by ID or delete it and verify the success alert.
+- Capture the generated order ID in the Cucumber report.
+- Create orders for the order-management scenarios, then view an order by ID or delete it and verify the success alert.
 
 ### ProtoCommerce
 
@@ -66,7 +65,7 @@ Page Objects encapsulate screen-specific locators and interactions. Application-
 
 ### Account creation
 
-`ClientDashboardTests.spec.js` creates a user with Faker-generated identity data, including a unique, lowercase email address.
+The account-creation scenario uses Faker-generated identity data, including a unique, lowercase email address.
 
 ## Requirements and setup
 
@@ -82,7 +81,7 @@ npx playwright install chromium
 
 ## Credentials
 
-The Let's Shop and EventHub suites use the same test account through `TEST_USER_EMAIL` and `TEST_USER_PASSWORD`. The Playwright configuration loads these values from a local `.env` file using `dotenv`.
+The Let's Shop and EventHub suites use the same test account through `TEST_USER_EMAIL` and `TEST_USER_PASSWORD`. Cucumber's support setup loads these values from a local `.env` file using `dotenv`.
 
 Create `.env` in the repository root:
 
@@ -95,10 +94,23 @@ TEST_USER_PASSWORD=your-test-account-password
 
 ## Running tests
 
-Run all tests:
+Run all scenarios:
 
 ```bash
-npx playwright test
+npm test
+```
+
+Run scenarios by tag:
+
+```bash
+npm run test:api
+npm run test:web
+```
+
+Generate the Cucumber HTML report:
+
+```bash
+npx cucumber-js --format progress --format html:cucumber-report.html
 ```
 
 Check the TypeScript types in the Orders API client:
@@ -107,33 +119,10 @@ Check the TypeScript types in the Orders API client:
 npm run typecheck
 ```
 
-Run a specific suite:
+Open `cucumber-report.html` from the repository root in your browser.
 
-```bash
-npx playwright test tests/letsshop/LetsShopDashboardTests.spec.js
-npx playwright test tests/letsshop/LetsShopOrdersTests.spec.js
-npx playwright test tests/letsshop/ClientDashboardTests.spec.js
-npx playwright test tests/letsshop/LetsShopWebAPITests.spec.js
-npx playwright test tests/UIBasicTestStep.spec.js
-npx playwright test tests/eventhub/EventHubInterceptTests.spec.js
-npx playwright test tests/eventhub/EventHubCrossUserBookingTests.spec.js
-npx playwright test tests/eventhub/EventHubFixturesTests.spec.js
-```
-
-Run tests matching a title:
-
-```bash
-npx playwright test --grep "places order"
-```
-
-Open the HTML report:
-
-```bash
-npx playwright show-report
-```
-
-The configuration currently runs headless Chromium at a desktop viewport, captures screenshots, retains traces on failure, and generates the Playwright HTML report. See [`playwright.config.js`](./playwright.config.js).
+Scenarios run in headless Chromium at a desktop viewport. Failed scenarios include a screenshot and a Playwright trace (`.zip`) as attachments in the Cucumber report. Open the trace with `npx playwright show-trace <trace-file.zip>`. Traces may contain page data and should be treated as sensitive artifacts.
 
 ## Test data and order IDs
 
-Order IDs are passed between steps in memory within each test rather than through a shared file. The ID is also attached to the corresponding test result as `order-id.txt` for convenient inspection in the HTML report. This keeps tests independent and avoids relying on execution order or shared mutable data.
+Order IDs are passed between steps in memory within each scenario rather than through a shared file. The ID is also attached as plain text to the corresponding Cucumber report entry for convenient inspection. This keeps scenarios independent and avoids relying on execution order or shared mutable data.

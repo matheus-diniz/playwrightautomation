@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "npx playwright test tests/letsshop/LetsShopWebAPITests.spec.js --headed --project=chromium",
+    "test": "cucumber-js",
+    "test:api": "cucumber-js --tags @api",
+    "test:web": "cucumber-js --tags @web",
     "typecheck": "tsc --noEmit"
   },
   "keywords": [],
@@ -13,9 +15,11 @@
   "type": "commonjs",
   "devDependencies": {
     "@faker-js/faker": "^10.6.0",
+    "@cucumber/cucumber": "^12.2.0",
     "@playwright/test": "^1.64.1",
     "@types/node": "^26.6.5",
     "dotenv": "^18.0.8",
+    "playwright": "^1.64.1",
     "typescript": "^7.0.2"
   }
 }
