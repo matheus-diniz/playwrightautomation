@@ -107,6 +107,10 @@ npm run test:api
 npm run test:web
 ```
 
+## GitHub Actions
+
+The `Cucumber Tests` workflow runs on pushes to `master` and on pull requests targeting `master`. After a run, download the `cucumber-report` artifact from the workflow run page to view the HTML report.
+
 Generate the Cucumber HTML report:
 
 ```bash
