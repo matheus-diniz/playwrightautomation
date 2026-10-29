@@ -1,19 +1,12 @@
 const { Given, When, Then } = require('@cucumber/cucumber');
 const { expect } = require('@playwright/test');
 const { randomUUID } = require('crypto');
-const EventHubLoginPage = require('../../pages/EventHubLoginPage');
+const EventHubAuthApi = require('../../api/EventHubAuthApi');
+const EventHubLoginPage = require('../../pages/eventhub/EventHubLoginPage');
 
 const EVENTHUB_URL = 'https://eventhub.rahulshettyacademy.com';
 const EVENTHUB_API_URL = 'https://api.eventhub.rahulshettyacademy.com/api';
 const EVENTHUB_TEST_PASSWORD = 'EventHubTest@12345';
-
-function requiredCredential(name) {
-    const value = process.env[name];
-    if (!value) {
-        throw new Error(`DATA NOT FOUND: Please set ${name} in environment variables.`);
-    }
-    return value;
-}
 
 async function requireSuccessfulResponse(response, operation) {
     if (!response.ok()) {
@@ -51,14 +44,13 @@ function eventsResponse(count) {
 
 Given('two EventHub users are registered', async function () {
     const uniqueId = randomUUID();
+    this.eventHubAuthApi = new EventHubAuthApi(this.api);
     this.eventHubUser = {
         first: { email: `yahoo-${uniqueId}@example.com`, password: EVENTHUB_TEST_PASSWORD },
         second: { email: `gmail-${uniqueId}@example.com`, password: EVENTHUB_TEST_PASSWORD },
     };
-
     for (const user of Object.values(this.eventHubUser)) {
-        const response = await this.api.post(`${EVENTHUB_API_URL}/auth/register`, { data: user });
-        expect(response.status()).toBe(201);
+        await this.eventHubAuthApi.register(user);
     }
 });
 
@@ -109,8 +101,8 @@ Then('access to the booking is denied', async function () {
 
 Given('I create an EventHub event through the API', async function () {
     const user = {
-        email: requiredCredential('TEST_USER_EMAIL'),
-        password: requiredCredential('TEST_USER_PASSWORD'),
+        email: EventHubAuthApi.requiredCredential('TEST_USER_EMAIL'),
+        password: EventHubAuthApi.requiredCredential('TEST_USER_PASSWORD'),
     };
     const loginResponse = await this.api.post(`${EVENTHUB_API_URL}/auth/login`, { data: user });
     await requireSuccessfulResponse(loginResponse, 'EventHub API login');
@@ -153,8 +145,8 @@ Given('the EventHub API is mocked to return {int} events', async function (count
 
 When('I open the EventHub events page as an authenticated user', async function () {
     const credentials = this.eventHubUser?.second ?? {
-        email: requiredCredential('TEST_USER_EMAIL'),
-        password: requiredCredential('TEST_USER_PASSWORD'),
+        email: EventHubAuthApi.requiredCredential('TEST_USER_EMAIL'),
+        password: EventHubAuthApi.requiredCredential('TEST_USER_PASSWORD'),
     };
     await new EventHubLoginPage(this.page).login(credentials);
     await this.page.goto(`${EVENTHUB_URL}/events`);

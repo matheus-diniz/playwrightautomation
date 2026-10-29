@@ -1,5 +1,31 @@
 Feature: EventHub access and event listings
 
+  @web
+  Scenario: Register a fresh EventHub account
+    Given I open the EventHub registration page
+    When I register a unique EventHub account
+    Then the EventHub account registration succeeds
+
+  @web
+  Scenario: Reject invalid EventHub credentials
+    Given I open the EventHub login page
+    When I sign in to EventHub with invalid credentials
+    Then the EventHub login error is displayed
+
+  @web
+  Scenario: Create an event, book one ticket, and verify seat reduction
+    Given I sign in to EventHub with configured credentials
+    When I create a unique EventHub event with 50 seats
+    And I book one ticket for the created EventHub event
+    Then the booking is listed in My Bookings
+    And the EventHub event has one fewer available seat
+
+  @web
+  Scenario: Prevent EventHub event creation when required fields are missing
+    Given I sign in to EventHub with configured credentials
+    When I submit the blank EventHub event form
+    Then EventHub required-field validation prevents creation
+
   @api @web
   Scenario: A user cannot view another user's booking
     Given two EventHub users are registered
@@ -26,4 +52,3 @@ Feature: EventHub access and event listings
     When I open the EventHub events page as an authenticated user
     Then 4 event cards are displayed
     And the sandbox banner is not displayed
-

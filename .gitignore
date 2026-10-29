@@ -7,4 +7,7 @@ node_modules/
 /playwright/.cache/
 /playwright/.auth/
 /cucumber-report.html
+.playwright-mcp/
+.vscode/mcp.json
+.github/workflows/copilot-setup-steps.yml
 .env

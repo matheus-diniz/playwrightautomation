@@ -3,11 +3,11 @@ const { expect } = require('@playwright/test');
 const { faker } = require('@faker-js/faker');
 const AuthApi = require('../../api/AuthApi');
 const OrdersApi = require('../../api/OrdersApi.ts');
-const LetsShopLoginPage = require('../../pages/LetsShopLoginPage');
-const LetsShopDashboardPage = require('../../pages/LetsShopDashboardPage');
-const LetsShopCartPage = require('../../pages/LetsShopCartPage');
-const LetsShopCheckoutPage = require('../../pages/LetsShopCheckoutPage');
-const LetsShopOrdersPage = require('../../pages/LetsShopOrdersPage');
+const LetsShopLoginPage = require('../../pages/letsshop/LetsShopLoginPage');
+const LetsShopDashboardPage = require('../../pages/letsshop/LetsShopDashboardPage');
+const LetsShopCartPage = require('../../pages/letsshop/LetsShopCartPage');
+const LetsShopCheckoutPage = require('../../pages/letsshop/LetsShopCheckoutPage');
+const LetsShopOrdersPage = require('../../pages/letsshop/LetsShopOrdersPage');
 
 function requiredCredential(name) {
     const value = process.env[name];
