@@ -11,3 +11,4 @@ node_modules/
 .vscode/mcp.json
 .github/workflows/copilot-setup-steps.yml
 .env
+*.pdf
