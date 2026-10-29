@@ -93,7 +93,7 @@ When("I create a new Let's Shop account", async function () {
         firstName,
         lastName,
         email: `${emailName}.${faker.string.uuid().slice(0, 3)}@playwrighttest.com.br`,
-        phoneNumber: faker.string.numeric(10),
+        phoneNumber: `${faker.helpers.arrayElement(['6', '7', '8', '9'])}${faker.string.numeric(9)}`,
         password: 'Test@12345',
         gender: faker.helpers.arrayElement(['Male', 'Female']),
         occupation: 'Engineer',
