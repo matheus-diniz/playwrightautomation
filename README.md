@@ -38,6 +38,20 @@ The suites cover three practice applications:
 
 Page Objects encapsulate screen-specific locators and interactions. Gherkin feature files describe user-visible scenarios, while step definitions implement them. Cucumber hooks create an isolated Playwright context for each scenario. All scenarios exercise the web UI; some use API calls to prepare test data. The `@api` tag identifies those hybrid scenarios, and `@web` selects scenarios that exercise the UI. Tags can be used to filter execution.
 
+## AI-assisted test engineering workflow
+
+I use Playwright's planning and browser tools to accelerate discovery while keeping test design and implementation grounded in the application and this repository's conventions.
+
+1. **Start with the codebase.** Review the target portal's feature file, step definitions, Page Objects, API helpers, and Cucumber hooks. Identify reusable authentication, test-data, and cleanup flows before deciding what to add.
+2. **Turn requirements into a test plan.** Use the Playwright Test Planner to organize scenarios, actions, and expected outcomes. Keep plans under `specs/` so the intended behavior is explicit before implementation.
+3. **Explore to verify, not to assume.** Use the Playwright Test Generator and Playwright MCP browser tools to inspect the live UI, confirm selectors and page states, and check asynchronous behavior. Feed observed discrepancies back into the plan rather than relying on guessed locators.
+4. **Implement in the project's test architecture.** Translate the verified plan into Gherkin scenarios under `features/`, Cucumber step definitions under `features/step_definitions/`, and reusable UI behavior in portal-specific Page Objects under `pages/`. Keep shared API operations in class-based helpers under `api/`.
+5. **Keep the tool boundary clear.** Browser planning and generator tools support exploration; they do not create executable tests for this project. Do not generate Playwright Test `.spec.js` or `.spec.ts` files. Cucumber remains the runner and Gherkin remains the executable test specification.
+6. **Use credentials and test data safely.** Cucumber loads `TEST_USER_EMAIL` and `TEST_USER_PASSWORD` from the local `.env` through the existing support setup. Do not place secrets in prompts, source files, or logs. Isolated browser-agent sessions may not inherit local environment variables, so use the project's local Cucumber flow for authenticated execution.
+7. **Verify the implementation.** Run `npx cucumber-js --dry-run`, then execute the changed feature or scenarios with the appropriate tag expression. Review failures, preserve unrelated portal flows, and rely on CI only after local validation.
+
+This workflow combines browser-based discovery with repository-aware implementation and executable Cucumber validation, keeping the resulting tests maintainable and consistent with the rest of the suite.
+
 ## Coverage
 
 ### EventHub
